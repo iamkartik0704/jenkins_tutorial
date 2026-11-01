@@ -1,5 +1,12 @@
 node{
-    stage('Hello'){
-        echo "Hello World!!"
+    stage('build'){
+        echo "building"
     }
+    stage('run'){
+        echo "running"
+    }
+    stage('deploy'){
+        echo "deploying"
+    }
+
 }
