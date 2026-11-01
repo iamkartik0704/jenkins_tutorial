@@ -8,5 +8,4 @@ node{
     stage('deploy'){
         echo "deploying"
     }
-
 }
