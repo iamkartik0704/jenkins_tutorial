@@ -1,0 +1,70 @@
+pipeline {
+    agent any
+
+    environment {
+        IMAGE_NAME = 'go-jenkins-docker'
+        DOCKERHUB_USER = 'your-dockerhub-username'
+        APP_DIR = 'go-jenkins/src'
+    }
+
+    stages {
+        stage('Clone Github Repository') {
+            steps {
+                git branch: 'main', changelog: false, poll: false, url: 'https://github.com/iamkartik0704/jenkins_tutorial.git'
+                sh 'pwd'
+            }
+        }
+        stage('Build') {
+            steps {
+                dir("${APP_DIR}") {
+                    sh 'go build -o app .'
+                }
+            }
+        }
+        stage('Test') {
+            steps {
+                dir("${APP_DIR}") {
+                    sh 'go test ./...'
+                }
+            }
+        }
+        stage('Vet') {
+            steps {
+                dir("${APP_DIR}") {
+                    sh 'go vet ./...'
+                }
+            }
+        }
+        stage('Docker image Build') {
+            steps {
+                dir("${APP_DIR}") {
+                    sh 'docker build -t ${IMAGE_NAME}:latest .'
+                }
+            }
+        }
+        stage('Docker image Tag') {
+            steps {
+                sh 'docker tag ${IMAGE_NAME}:latest ${DOCKERHUB_USER}/${IMAGE_NAME}:latest'
+            }
+        }
+        stage('Docker Login') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DH_USER', passwordVariable: 'DH_PASS')]) {
+                    sh 'echo "$DH_PASS" | docker login -u "$DH_USER" --password-stdin'
+                }
+            }
+        }
+        stage('Docker Image Push') {
+            steps {
+                sh 'docker push ${DOCKERHUB_USER}/${IMAGE_NAME}:latest'
+            }
+        }
+    }
+
+    post {
+        always {
+            sh 'docker logout || true'
+            cleanWs()
+        }
+    }
+}

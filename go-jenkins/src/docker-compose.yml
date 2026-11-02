@@ -1,0 +1,7 @@
+services:
+  goapp:
+    build: .
+    container_name: go-jenkins-docker
+    image: go-jenkins-docker:latest
+    ports:
+      - "8080:8080"

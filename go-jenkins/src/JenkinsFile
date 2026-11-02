@@ -1,0 +1,33 @@
+pipeline{
+    agent any
+    stages{
+        stage('build'){
+            steps{
+                dir('go-jenkins/src')
+                    sh 'go build -o app .'
+            }
+        }
+        stage('Test'){
+            steps{
+                dir('go-jenkins/src')
+                    sh 'go/test ./...'
+            }
+        }
+        stage('docker build'){
+            steps{
+                dir('go-jenkins/src')
+                    sh 'docker build -t go-jenkins-docker:latest .'
+            }
+        }
+        stage('docker run'){
+            steps{
+                sh '''
+                    docker run --rm -d -p 8081:8080 --name go-jenkins-docker go-jenkins-docker:latest
+                    sleep 3
+                    curl -f http://localhost:8081
+                    docker stop go-jenkins-docker
+                '''
+            }
+        }
+    }
+}
