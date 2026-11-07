@@ -5,8 +5,9 @@ pipeline{
             steps{
                 withCredentials([usernamePassword(credentialsId: 'sampleCreds', passwordVariable: 'SamplePassword', usernameVariable: 'SampleUsername')]) {
                         echo 'hello world'
-                        echo 'Username = ${SampleUsername}'
-                        echo 'Password = ${SamplePassword}'
+                        echo "Username = ${SampleUsername}"
+                        // for using ${} use double quotes only
+                        echo "Password = ${SamplePassword}"
                 }
             }
         }
