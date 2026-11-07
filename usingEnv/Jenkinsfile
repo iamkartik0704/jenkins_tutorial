@@ -2,6 +2,8 @@ pipeline{
     agent any
     environment{
         DOCKER_IMAGE = "thekartik747/go-jenkins-docker"
+        APP_NAME = "thekartik747/go-jenkins-app"
+        TAG_VERSION = 'v1.0.37'
     }
     stages{
         stage('DOCKER LOGIN'){
@@ -18,6 +20,20 @@ pipeline{
                 echo "pulling the docker image"
                 sh "docker pull ${DOCKER_IMAGE}"
                 echo "Docker pull successfull"
+            }
+        }
+        stage('Docker Tag'){
+            steps{
+                echo "docker image tagging in the process"
+                sh "docker tag ${DOCKER_IMAGE} ${APP_NAME}:${TAG_VERSION}"
+                echo "docker tag successfully completed"
+            }
+        }
+        stage('DOCKER PUSH'){
+            steps{
+                echo "docker push in progress"
+                sh "docker push ${APP_NAME}:${TAG_VERSION}"
+                echo "docker push successful"
             }
         }
     }
