@@ -30,7 +30,7 @@ pipeline {
         stage('Docker Build') {
             steps {
                 dir('jenkins_worker_node_testing') {
-                    sh 'docker build -t go-app:latest .'
+                    sh 'docker buildx build -t go-app:latest .'
                 }
             }
         }
