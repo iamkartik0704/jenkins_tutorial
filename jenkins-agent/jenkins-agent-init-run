@@ -1,0 +1,20 @@
+pipeline{
+    agent {label 'worker-node'}
+    stages{
+        stage('build'){
+            steps{
+                sh 'echo "building project..."'
+            }
+        }
+        stage('test'){
+            steps{
+                sh 'echo "running tests..."'
+            }
+        }
+        stage('create'){
+            steps{
+                sh 'touch newfile.txt'
+            }
+        }
+    }
+}
