@@ -18,7 +18,12 @@ pipeline {
         stage('Test') {
             steps {
                 dir('enkins_worker_node_testing') {
-                    sh 'go test -v ./...'
+                    sh '''
+                        cd jenkins_worker_node_testing
+                        go mod init jenkins_worker_node_testing || true
+                        go mod tidy
+                        go test -v ./...
+                       '''
                 }
             }
         }
