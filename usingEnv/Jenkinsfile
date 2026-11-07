@@ -1,0 +1,22 @@
+pipeline{
+    agent any
+    environment{
+        DOCKER_IMAGE = "thekartik747/go-jenkins-docker"
+    }
+    stages{
+        stage('DOCKER LOGIN'){
+            withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'DockerHubPass', usernameVariable: 'DockerHubUser')]) {
+                echo "logging into the docker hub"
+                sh 'docker login -u ${DockerHubUser} -p ${DockerHubUser}'                
+                echo "logged into docker successfully"
+}
+        }
+        stage('Docker Pull'){
+            steps{
+                echo "pulling the docker image"
+                sh "docker pull ${DOCKER_IMAGE}"
+                echo "Docker pull successfull"
+            }
+        }
+    }
+}
