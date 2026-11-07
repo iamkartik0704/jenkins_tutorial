@@ -5,10 +5,12 @@ pipeline{
     }
     stages{
         stage('DOCKER LOGIN'){
+            stpes{
             withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'DockerHubPass', usernameVariable: 'DockerHubUser')]) {
                 echo "logging into the docker hub"
                 sh 'docker login -u ${DockerHubUser} -p ${DockerHubUser}'                
                 echo "logged into docker successfully"
+            }
 }
         }
         stage('Docker Pull'){
