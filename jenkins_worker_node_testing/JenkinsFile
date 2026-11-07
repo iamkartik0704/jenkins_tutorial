@@ -1,0 +1,51 @@
+pipeline {
+    agent { label 'worker-node' }
+    stages {
+        stage('Clone Github Repository') {
+            steps {
+                git branch: 'main', changelog: false, poll: false, url: 'https://github.com/iamkartik0704/jenkins-tut.git'
+                sh 'pwd'
+            }
+        }        
+        stage('Build') {
+            steps {
+                dir('jenkins_worker_node_testing') {
+                    // compile the gofile
+                    sh 'go build -o app testfile.go'
+                }
+            }
+        }
+        stage('Test') {
+            steps {
+                dir('enkins_worker_node_testing') {
+                    sh 'go test -v ./...'
+                }
+            }
+        }
+        stage('Docker Build') {
+            steps {
+                dir('jenkins_worker_node_testing') {
+                    sh 'docker build -t go-app:latest .'
+                }
+            }
+        }
+        stage('Docker Run') {
+            steps {
+                dir('jenkins_worker_node_testing') {
+                    sh 'docker run --rm go-app:latest'
+                }
+            }
+        }     
+    }
+    post {
+        always {
+            cleanWs()
+        }
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed!'
+        }
+    }
+}
