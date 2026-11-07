@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Clone Github Repository') {
             steps {
-                git branch: 'main', changelog: false, poll: false, url: 'https://github.com/iamkartik0704/jenkins-tut.git'
+                git branch: 'main', changelog: false, poll: false, url: 'https://github.com/iamkartik0704/jenkins_tutorial'
                 sh 'pwd'
             }
         }        
