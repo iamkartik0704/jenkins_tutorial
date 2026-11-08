@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         DOCKERHUB_CREDENTIALS = credentials('DockerHub')
-        IMAGE_NAME = 'iamkartik0704/go-portfolio'
+        IMAGE_NAME = 'thekartik747/go-portfolio'
     }
 
     stages {
@@ -53,7 +53,7 @@ pipeline {
     }
 
     post {
-        success { echo '✅ Go Portfolio: Build, Test, and Deploy completed successfully!' }
-        failure { echo '❌ Pipeline failed. Check logs.' }
+        success { echo 'Go Portfolio: Build, Test, and Deploy completed successfully!' }
+        failure { echo 'Pipeline failed. Check logs.' }
     }
 }
