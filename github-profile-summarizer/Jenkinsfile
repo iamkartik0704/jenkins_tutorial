@@ -16,8 +16,10 @@ pipeline {
 
     stage('Build (Node)') {
       steps {
-        sh 'npm install'
-        sh 'npm run build'
+        dir('github-profile-summarizer') {
+            sh 'npm install'
+            sh 'npm run build'
+        }
       }
     }
 
@@ -28,10 +30,10 @@ pipeline {
         withCredentials([string(credentialsId: 'github-token-secret', variable: 'GITHUB_TOKEN_VALUE')]) {
           
           // Pass the token to the Docker build command using --build-arg
-          sh "docker build \
-            --build-arg VITE_GITHUB_TOKEN=${GITHUB_TOKEN_VALUE} \
-            --build-arg VITE_MAX_REPOS=${MAX_REPOS} \
-            -t ${IMAGE_NAME}:${IMAGE_TAG} ."
+          dir('github-profile-summarizer') {
+            withCredentials([string(credentialsId: 'your-github-token-id', variable: 'GITHUB_TOKEN_VALUE')]) {
+                sh 'docker build --build-arg VITE_GITHUB_TOKEN="$GITHUB_TOKEN_VALUE" --build-arg VITE_MAX_REPOS=50 -t thekartik747/github-profile-summarizer:v${BUILD_NUMBER} .'
+            }
         }
       }
     }
