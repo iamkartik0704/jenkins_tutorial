@@ -1,29 +1,25 @@
-# 📁 Portfolio Web Applications (Go & Flask)
+# 📁 Go Portfolio Web Application
 
-Portfolio implementations for **Kartik Chawla** (Software Engineer & B.Tech student at IIT Patna):
+High-performance Go web portfolio for **Kartik Chawla** (Software Engineer & B.Tech student at IIT Patna):
 
 - **Live Reference Website**: [https://www.kartikchawla.in/](https://www.kartikchawla.in/)
-- **LinkedIn**: [https://www.linkedin.com/in/iamkartik0704/](https://www.linkedin.com/in/iamkartik0704/)
+- **LinkedIn**: [https://www.linkedin.com/in/kartik-chawla-189430203/](https://www.linkedin.com/in/kartik-chawla-189430203/)
 - **GitHub**: [https://github.com/iamkartik0704](https://github.com/iamkartik0704)
 - **Email**: [iamkartik0704@gmail.com](mailto:iamkartik0704@gmail.com)
 
 ---
 
-## Implementations
+## 🚀 Features
 
-1. **`go-portfolio/`** *(Recommended)*
-   - High-performance Go implementation using standard library `net/http` and `embed.FS`.
-   - Zero external dependencies.
-   - Comprehensive unit tests in `main_test.go`.
-   - Multi-stage Docker build producing a ~20MB container.
-   - Declarative Jenkins CI/CD pipeline.
-
-2. **`flask-portfolio/`**
-   - Python Flask implementation with Jinja2 templates, Dockerfile, and Jenkins pipeline.
+- Built with standard library `net/http` and `embed.FS` (zero external dependencies).
+- Embedded templates and static assets in a single compiled binary.
+- Multi-stage Docker build producing a ~20MB container.
+- Declarative Jenkins CI/CD pipeline.
+- Comprehensive unit tests in `main_test.go`.
 
 ---
 
-## Quick Start (Go Portfolio)
+## Quick Start
 
 ```bash
 cd go-portfolio
