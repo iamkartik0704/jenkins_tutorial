@@ -1,0 +1,26 @@
+{{define "title"}}{{ .Current.Title }} • Kartik Chawla{{end}}
+
+{{define "content"}}
+  <section class="playlist-hero" style="--hero-gradient: {{ .Current.Gradient }};">
+    <h1>{{ .Current.Title }}</h1>
+    <p>Watch the full playlist here without leaving the site.</p>
+  </section>
+
+  <section class="player-wrap">
+    <div class="player">
+      <iframe 
+        src="https://www.youtube.com/embed/videoseries?list={{ .Current.ListID }}"
+        title="{{ .Current.Title }}"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen>
+      </iframe>
+    </div>
+    <div class="player-actions">
+      <a class="btn" href="/">← Back to Home</a>
+      <a class="btn yt" href="{{ .LinkedInURL }}" target="_blank" rel="noopener">Connect on LinkedIn</a>
+      <a class="btn" href="{{ .GitHubURL }}" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </section>
+{{end}}

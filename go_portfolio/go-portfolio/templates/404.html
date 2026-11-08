@@ -1,0 +1,14 @@
+{{define "title"}}404 - Not Found • Kartik Chawla{{end}}
+
+{{define "content"}}
+  <section class="playlist-hero" style="--hero-gradient: linear-gradient(135deg, #ff0844 0%, #ffb199 100%);">
+    <h1>404 - Page Not Found</h1>
+    <p>The page or playlist you are looking for does not exist.</p>
+  </section>
+
+  <div class="player-actions" style="margin-top: 32px; display: flex; justify-content: center; gap: 12px;">
+    <a class="btn" href="/">← Back to Home</a>
+    <a class="btn yt" href="{{ .LinkedInURL }}" target="_blank" rel="noopener">Connect on LinkedIn</a>
+    <a class="btn" href="{{ .GitHubURL }}" target="_blank" rel="noopener">GitHub</a>
+  </div>
+{{end}}

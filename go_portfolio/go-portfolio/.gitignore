@@ -1,0 +1,23 @@
+# Binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+portfolio
+app
+
+# Test binaries
+*.test
+
+# Output files
+*.out
+
+# Environment variables
+.env
+.env.*
+
+# OS files
+.DS_Store
+Thumbs.db
+

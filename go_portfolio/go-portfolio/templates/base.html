@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{block "title" .}}Kartik Chawla{{end}}</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="bg-gradient"></div>
+  <header class="nav">
+    <div class="brand">
+      <span class="logo">KC</span>
+      <a class="brand-text" href="/">Kartik Chawla</a>
+    </div>
+    <nav class="nav-actions">
+      <a class="btn yt" href="{{ .LinkedInURL }}" target="_blank" rel="noopener">Connect</a>
+      <a class="btn" href="{{ .GitHubURL }}" target="_blank" rel="noopener">GitHub</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    {{block "content" .}}{{end}}
+  </main>
+
+  <footer class="footer">
+    <p>© {{ .Year }} Kartik Chawla — Built with Go • <a href="{{ .LinkedInURL }}" target="_blank" rel="noopener">LinkedIn</a> • <a href="{{ .GitHubURL }}" target="_blank" rel="noopener">GitHub</a> • <a href="{{ .PortfolioURL }}" target="_blank" rel="noopener">Portfolio</a></p>
+  </footer>
+</body>
+</html>

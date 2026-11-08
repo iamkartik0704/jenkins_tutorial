@@ -1,0 +1,218 @@
+{{define "title"}}Home • Kartik Chawla{{end}}
+
+{{define "content"}}
+  <section class="hero hero-youtuber">
+    <div class="hero-photo-wrap">
+      <img class="hero-photo" src="/static/img/hero.jpg" alt="Kartik Chawla Portrait">
+      <span class="photo-glow"></span>
+    </div>
+    <div class="hero-text">
+      <h1>Kartik Chawla</h1>
+      <h2>{{ .TitleRole }}</h2>
+      <p class="tagline">{{ .BioText }}</p>
+
+      <div class="skills-wrap">
+        {{range .Skills}}
+          <span class="badge">{{ . }}</span>
+        {{end}}
+      </div>
+
+      <div class="hero-actions">
+        <a class="btn yt" href="{{ .LinkedInURL }}" target="_blank" rel="noopener">↗ Connect on LinkedIn</a>
+        <a class="btn" href="{{ .GitHubURL }}" target="_blank" rel="noopener">★ GitHub Profile</a>
+        <a class="btn accent" href="{{ .PortfolioURL }}" target="_blank" rel="noopener">🌐 kartikchawla.in</a>
+        <a class="btn" href="mailto:{{ .Email }}">✉️ Get in Touch</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Projects -->
+  <h2 class="section-heading">🚀 Featured Projects</h2>
+  <div class="projects-grid">
+    {{range .Projects}}
+      <div class="project-card">
+        <div>
+          <h3>{{ .Title }}</h3>
+          <p>{{ .Description }}</p>
+        </div>
+        <div>
+          <div class="project-tech">{{ .Tech }}</div>
+          <div style="margin-top: 10px;">
+            <a class="btn" href="{{ .URL }}" target="_blank" rel="noopener" style="padding: 6px 12px; font-size: 0.82rem;">Explore ↗</a>
+          </div>
+        </div>
+      </div>
+    {{end}}
+  </div>
+
+  <!-- DevOps & Cloud Tracks -->
+  <h2 class="section-heading">🛠️ DevOps & Cloud Learning Tracks</h2>
+  <section class="grid" style="margin-top: 10px;">
+    {{range .Cards}}
+      <a class="card" href="{{ .URL }}">
+        <div class="card-glow"></div>
+        <div class="card-body">
+          <h2>{{ .Title }}</h2>
+          <p>Click to open interactive track ➜</p>
+        </div>
+      </a>
+    {{end}}
+  </section>
+
+  <!-- Journey & Leadership -->
+  <h2 class="section-heading">💼 Experience & Campus Leadership</h2>
+  <div class="projects-grid">
+    {{range .Experiences}}
+      <div class="project-card">
+        <div>
+          <h3>{{ .Role }}</h3>
+          <div style="color: var(--accent); font-weight: 600; font-size: 0.85rem; margin-bottom: 8px;">{{ .Organization }} • <span style="color: var(--muted);">{{ .Period }}</span></div>
+          <p>{{ .Description }}</p>
+        </div>
+      </div>
+    {{end}}
+  </div>
+
+  <!-- Life & Tech Carousel -->
+  <h2 class="section-heading">📸 Life & Journey @ IIT Patna</h2>
+  <section class="carousel-section">
+    <div id="sg-carousel" class="carousel">
+      <div class="slides">
+        <img src="/static/img/slide1.jpg" alt="IIT Patna Tech Event 1">
+        <img src="/static/img/slide2.jpg" alt="IIT Patna Tech Event 2">
+        <img src="/static/img/slide3.jpg" alt="IIT Patna Tech Event 3">
+        <img src="/static/img/slide4.jpg" alt="IIT Patna Tech Event 4">
+      </div>
+      <button class="nav prev" aria-label="Previous slide">&#10094;</button>
+      <button class="nav next" aria-label="Next slide">&#10095;</button>
+      <div class="dots"></div>
+    </div>
+  </section>
+
+  <script>
+    // Auto-rotating carousel
+    (function() {
+      const root = document.getElementById('sg-carousel');
+      if (!root) return;
+      const slidesWrap = root.querySelector('.slides');
+      const slides = Array.from(slidesWrap.querySelectorAll('img')).filter(Boolean);
+      const prevBtn = root.querySelector('.prev');
+      const nextBtn = root.querySelector('.next');
+      const dotsWrap = root.querySelector('.dots');
+      let idx = 0;
+      let timer = null;
+      const duration = 5000;
+
+      function renderDots(){
+        dotsWrap.innerHTML = '';
+        slides.forEach((_, i) => {
+          const b = document.createElement('button');
+          b.className = 'dot' + (i === idx ? ' active' : '');
+          b.setAttribute('aria-label', 'Go to slide ' + (i+1));
+          b.addEventListener('click', () => go(i));
+          dotsWrap.appendChild(b);
+        });
+      }
+
+      function go(i){
+        idx = (i + slides.length) % slides.length;
+        const offset = -idx * 100;
+        slidesWrap.style.transform = 'translateX(' + offset + '%)';
+        renderDots();
+        restart();
+      }
+
+      function next(){ go(idx + 1); }
+      function prev(){ go(idx - 1); }
+
+      function start(){
+        timer = setInterval(next, duration);
+      }
+      function stop(){
+        if (timer) { clearInterval(timer); timer = null; }
+      }
+      function restart(){
+        stop(); start();
+      }
+
+      nextBtn.addEventListener('click', next);
+      prevBtn.addEventListener('click', prev);
+      root.addEventListener('mouseenter', stop);
+      root.addEventListener('mouseleave', start);
+
+      // Init
+      slidesWrap.style.width = (slides.length * 100) + '%';
+      slides.forEach(s => s.style.width = (100 / slides.length) + '%');
+      renderDots();
+      start();
+    })();
+  </script>
+
+  <style>
+    .hero-youtuber{
+      display:grid; gap:22px; align-items:center;
+      grid-template-columns: 160px 1fr;
+      margin: 12px 0 6px;
+    }
+    @media (min-width: 760px){
+      .hero-youtuber{ grid-template-columns: 220px 1fr; gap:28px; }
+    }
+    .hero-photo-wrap{
+      position:relative; width: 160px; height: 200px; margin: 0 auto;
+      border-radius: 20px; overflow: hidden; box-shadow: var(--shadow);
+    }
+    @media (min-width: 760px){
+      .hero-photo-wrap{ width: 220px; height: 280px; }
+    }
+    .hero-photo{ width: 100%; height: 100%; object-fit: cover; display:block; }
+    .photo-glow{
+      position:absolute; inset:-10%;
+      background: radial-gradient(50% 50% at 50% 10%, rgba(0,229,255,.35), transparent 70%);
+      filter: blur(18px); pointer-events:none;
+    }
+    .hero-text h1{ margin: 0 0 6px; font-size: clamp(1.6rem, 3vw, 2.2rem); }
+    .hero-text h2{ margin: 0 0 8px; color: var(--muted); font-size: 1.05rem; font-weight:600;}
+    .tagline{ color: var(--text); opacity:.9; max-width: 700px; margin: 0 0 10px; }
+
+    .hero-actions{ display:flex; gap:10px; flex-wrap: wrap; margin-top:14px; }
+
+    /* Carousel */
+    .carousel-section{ margin: 16px 0 10px; }
+    .carousel{
+      position: relative;
+      background: var(--card);
+      border:1px solid rgba(255,255,255,.06);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .carousel .slides{
+      display:flex; transition: transform .6s ease;
+      width:100%;
+    }
+    .carousel img{
+      display:block; object-fit: cover;
+      aspect-ratio: 16 / 9; width:100%;
+    }
+    .carousel .nav{
+      position:absolute; top:50%; transform: translateY(-50%);
+      background: rgba(0,0,0,.35); border:1px solid rgba(255,255,255,.12);
+      color: #fff; width:38px; height:38px; border-radius: 50%;
+      display:grid; place-items:center; cursor:pointer;
+      transition: background .2s ease; z-index:2;
+    }
+    .carousel .nav:hover{ background: rgba(0,0,0,.5); }
+    .carousel .prev{ left:10px; }
+    .carousel .next{ right:10px; }
+    .carousel .dots{
+      position:absolute; bottom:10px; left:50%; transform: translateX(-50%);
+      display:flex; gap:6px; z-index:2;
+    }
+    .carousel .dot{
+      width:10px; height:10px; border-radius:50%;
+      border:1px solid rgba(255,255,255,.6); background: rgba(255,255,255,.25);
+      cursor:pointer;
+    }
+    .carousel .dot.active{ background: #fff; }
+  </style>
+{{end}}
