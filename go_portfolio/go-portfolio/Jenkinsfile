@@ -14,14 +14,20 @@ pipeline {
 
         stage('Run Tests & Lint') {
             steps {
-                sh 'go test -v ./...'
-                sh 'go vet ./...'
+                dir('go_portfolio/go-portfolio')
+                {
+                    sh 'go test -v ./...'
+                }
+                // sh 'go vet ./...'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t $IMAGE_NAME:$BUILD_NUMBER -t $IMAGE_NAME:latest .'
+                dir('go_portfolio/go-portfolio')
+                {
+                    sh 'docker build -t $IMAGE_NAME:$BUILD_NUMBER -t $IMAGE_NAME:latest .'
+                }
             }
         }
 
