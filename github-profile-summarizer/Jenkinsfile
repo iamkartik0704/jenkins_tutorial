@@ -26,7 +26,7 @@ pipeline {
             steps {
                 dir('github-profile-summarizer') {
                     withCredentials([string(credentialsId: 'github-token-secret', variable: 'GITHUB_TOKEN_VALUE')]) {
-                        sh 'docker build --build-arg VITE_GITHUB_TOKEN="$GITHUB_TOKEN_VALUE" --build-arg VITE_MAX_REPOS=50 -t ${IMAGE_NAME}:${IMAGE_TAG} .'
+                        sh 'docker build --no-cache --build-arg VITE_GITHUB_TOKEN="$GITHUB_TOKEN_VALUE" --build-arg VITE_MAX_REPOS=50 -t ${IMAGE_NAME}:${IMAGE_TAG} .'
                     }
                 }
             }
