@@ -17,36 +17,45 @@ pipeline {
 
     stage('Clean Workspace') {
       steps {
+        dir('go_project-3'){
         echo "Cleaning previous Go build files..."
         sh 'rm -rf dist'
+        }
       }
     }
 
     stage('Format Check') {
       steps {
+        dir('go_project_3'){
         echo "Checking Go formatting..."
         sh 'test -z "$(gofmt -l *.go)"'
+      }
       }
     }
 
     stage('Static Analysis') {
       steps {
-        echo "Running go vet..."
-        sh 'go vet ./...'
+        dir('go_project_3')
+        {echo "Running go vet..."
+        sh 'go vet ./...'}
       }
     }
 
     stage('Unit Tests') {
       steps {
-        echo "Running Go unit tests..."
-        sh 'go test -v ./...'
+        dir('go_project_3')
+       { echo "Running Go unit tests..."
+        sh 'go test -v ./...'}
       }
     }
 
     stage('Build') {
       steps {
+        dir('go_project_3'){
+
         echo "Building Go application..."
         sh 'mkdir -p dist && go build -o dist/app .'
+        }
       }
       post {
         success {
@@ -57,8 +66,12 @@ pipeline {
 
     stage('Build Docker Image') {
       steps {
+
+        dir('go_project_3'){
+
         echo "Building Docker image..."
         sh 'docker build -t $IMAGE_NAME:${BUILD_NUMBER} .'
+        }
       }
     }
 
