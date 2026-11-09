@@ -28,7 +28,7 @@ pipeline {
       steps {
         dir('go_project_3'){
         echo "Checking Go formatting..."
-        sh 'test -z "$(gofmt -l *.go)"'
+        sh 'gofmt -w . && test -z "$(gofmt -l *.go)"'
       }
       }
     }
@@ -59,7 +59,7 @@ pipeline {
       }
       post {
         success {
-          archiveArtifacts artifacts: 'dist/app', fingerprint: true
+          archiveArtifacts artifacts: 'go_project_3/dist/app', fingerprint: true
         }
       }
     }
