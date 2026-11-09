@@ -1,0 +1,122 @@
+pipeline {
+  agent any
+
+  environment {
+    IMAGE_NAME = "thekartik747/go_jenkins_tester"
+    DOCKERHUB_CREDENTIALS = credentials('DockerHub')
+  }
+
+  stages {
+
+    stage('Checkout') {
+      steps {
+        echo "Checking out code from SCM..."
+        checkout scm
+      }
+    }
+
+    stage('Clean Workspace') {
+      steps {
+        echo "Cleaning previous Go build files..."
+        sh 'rm -rf dist'
+      }
+    }
+
+    stage('Format Check') {
+      steps {
+        echo "Checking Go formatting..."
+        sh 'test -z "$(gofmt -l *.go)"'
+      }
+    }
+
+    stage('Static Analysis') {
+      steps {
+        echo "Running go vet..."
+        sh 'go vet ./...'
+      }
+    }
+
+    stage('Unit Tests') {
+      steps {
+        echo "Running Go unit tests..."
+        sh 'go test -v ./...'
+      }
+    }
+
+    stage('Build') {
+      steps {
+        echo "Building Go application..."
+        sh 'mkdir -p dist && go build -o dist/app .'
+      }
+      post {
+        success {
+          archiveArtifacts artifacts: 'dist/app', fingerprint: true
+        }
+      }
+    }
+
+    stage('Build Docker Image') {
+      steps {
+        echo "Building Docker image..."
+        sh 'docker build -t $IMAGE_NAME:${BUILD_NUMBER} .'
+      }
+    }
+
+    stage('DockerHub Login') {
+      steps {
+        echo "Logging into DockerHub..."
+        sh '''
+          echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
+        '''
+      }
+    }
+
+    stage('Push to DockerHub') {
+      steps {
+        echo "Pushing image to DockerHub..."
+        sh 'docker push $IMAGE_NAME:${BUILD_NUMBER}'
+      }
+    }
+
+    stage('Deploy (Run Container)') {
+      steps {
+        echo "Deploying Docker container..."
+        sh '''
+          echo "Stopping old container..."
+          docker stop go-jenkins-demo || true
+          docker rm go-jenkins-demo || true
+
+          echo "Starting new container..."
+          docker run -d --name go-jenkins-demo $IMAGE_NAME:${BUILD_NUMBER}
+
+          echo "Showing logs..."
+          sleep 3
+          docker logs go-jenkins-demo
+        '''
+      }
+    }
+
+    stage('Cleanup') {
+      steps {
+        echo "Cleaning up Docker resources..."
+        sh '''
+          docker stop go-jenkins-demo || true
+          docker rm go-jenkins-demo || true
+          docker rmi $IMAGE_NAME:${BUILD_NUMBER} || true
+        '''
+      }
+    }
+  }
+
+  post {
+    success {
+      echo "Build ${env.BUILD_NUMBER} completed successfully!"
+    }
+    failure {
+      echo "Build ${env.BUILD_NUMBER} failed!"
+    }
+    always {
+      cleanWs()
+    }
+  }
+}
